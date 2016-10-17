@@ -1,0 +1,9 @@
+﻿<?xml version="1.0" encoding="utf-8"?>
+<parameters>
+  <parameter name="DefaultConnection-Web.config Connection String" description="DefaultConnection Connection String used in web.config by the application to access the database." defaultValue="Data Source=(LocalDb)\v11.0;Initial Catalog=aspnet-HaveYouSeenMe-20121212003222;Integrated Security=SSPI;AttachDBFilename=|DataDirectory|\aspnet-HaveYouSeenMe-20121212003222.mdf" tags="SqlConnectionString">
+    <parameterEntry kind="XmlFile" scope="C:\\Projects\\HaveYouSeenMe\\HaveYouSeenMe\\obj\\Release\\Package\\PackageTmp\\Web\.config$" match="/configuration/connectionStrings/add[@name='DefaultConnection']/@connectionString" />
+  </parameter>
+  <parameter name="EntitiesConnection-Web.config Connection String" description="EntitiesConnection Connection String used in web.config by the application to access the database." defaultValue="metadata=res://*/Models.DataModel.csdl|res://*/Models.DataModel.ssdl|res://*/Models.DataModel.msl;provider=System.Data.SqlClient;provider connection string=&quot;data source=(LocalDb)\v11.0;attachdbfilename=|DataDirectory|\aspnet-HaveYouSeenMe-20121212003222.mdf;initial catalog=aspnet-HaveYouSeenMe-20121212003222;integrated security=True;MultipleActiveResultSets=True;App=EntityFramework&quot;" tags="SqlConnectionString">
+    <parameterEntry kind="XmlFile" scope="C:\\Projects\\HaveYouSeenMe\\HaveYouSeenMe\\obj\\Release\\Package\\PackageTmp\\Web\.config$" match="/configuration/connectionStrings/add[@name='EntitiesConnection']/@connectionString" />
+  </parameter>
+</parameters>

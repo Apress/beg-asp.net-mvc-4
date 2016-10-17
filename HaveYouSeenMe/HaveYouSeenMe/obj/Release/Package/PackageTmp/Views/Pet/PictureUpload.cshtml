@@ -1,0 +1,33 @@
+﻿@model HaveYouSeenMe.Models.PictureModel
+
+@{
+    ViewBag.Title = "PictureUpload";
+}
+
+<h2>PictureUpload</h2>
+
+@using (Html.BeginForm(null, null, FormMethod.Post, new { enctype = "multipart/form-data" }))
+{
+    @Html.AntiForgeryToken()
+    @Html.ValidationSummary(true)
+
+    <fieldset>
+        <legend>PictureModel</legend>
+
+        <div class="editor-label">
+            @Html.LabelFor(model => model.PictureFile)
+        </div>
+        <div class="editor-field">
+            @Html.TextBoxFor(model => model.PictureFile, new { type = "file" })
+            @Html.ValidationMessageFor(model => model.PictureFile)
+        </div>
+
+        <p>
+            <input type="submit" value="Save" />
+        </p>
+    </fieldset>
+}
+
+@section Scripts {
+    @Scripts.Render("~/bundles/jqueryval")
+}

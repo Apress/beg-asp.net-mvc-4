@@ -1,0 +1,111 @@
+﻿@model HaveYouSeenMe.Models.MessageModel
+
+@{
+    ViewBag.Title = "Send";
+}
+
+<h2>Send</h2>
+@if (ViewBag.IsSent) {
+        <fieldset>
+            <div class="editor-label">
+                @Html.LabelFor(model => model.From)
+            </div>
+            <div class="editor-field">
+                @Model.From
+            </div>
+
+            <div class="editor-label">
+                @Html.LabelFor(model => model.Email)
+            </div>
+            <div class="editor-field">
+                @Model.Email
+            </div>
+
+            <div class="editor-label">
+                @Html.LabelFor(model => model.TypeOfEmail)
+            </div>
+            <div class="editor-field">
+                @Model.TypeOfEmail
+            </div>
+
+            <div class="editor-label">
+                @Html.LabelFor(model => model.Subject)
+            </div>
+            <div class="editor-field">
+                @Model.Subject
+            </div>
+
+            <div class="editor-label">
+                @Html.LabelFor(model => model.Message)
+            </div>
+            <div class="editor-field">
+                @Html.Raw(Model.Message)
+            </div>
+
+            <h2>
+                Message sent...
+            </h2>
+        </fieldset>
+    
+}
+else{
+    using (Html.BeginForm()) {
+        @Html.AntiForgeryToken()
+        @Html.ValidationSummary(true)
+
+        <fieldset>
+            <legend>MessageModel</legend>
+
+            <div class="editor-label">
+                @Html.LabelFor(model => model.From)
+            </div>
+            <div class="editor-field">
+                @Html.EditorFor(model => model.From)
+                @Html.ValidationMessageFor(model => model.From)
+            </div>
+
+            <div class="editor-label">
+                @Html.LabelFor(model => model.Email)
+            </div>
+            <div class="editor-field">
+                @Html.EditorFor(model => model.Email)
+                @Html.ValidationMessageFor(model => model.Email)
+            </div>
+
+            <div class="editor-label">
+                @Html.LabelFor(model => model.TypeOfEmail)
+            </div>
+            <div class="editor-field">
+                @Html.TextBoxFor(model => model.TypeOfEmail, new { type = "file" })
+                @Html.ValidationMessageFor(model => model.TypeOfEmail)
+            </div>
+
+            <div class="editor-label">
+                @Html.LabelFor(model => model.Subject)
+            </div>
+            <div class="editor-field">
+                @Html.EditorFor(model => model.Subject)
+                @Html.ValidationMessageFor(model => model.Subject)
+            </div>
+
+            <div class="editor-label">
+                @Html.LabelFor(model => model.Message)
+            </div>
+            <div class="editor-field">
+                @Html.EditorFor(model => model.Message)
+                @Html.ValidationMessageFor(model => model.Message)
+            </div>
+
+            <p>
+                <input type="submit" value="Create" />
+            </p>
+        </fieldset>
+    }
+}
+<div>
+    @Html.ActionLink("Back to List", "Index")
+</div>
+
+@section Scripts {
+    @Scripts.Render("~/bundles/jqueryval")
+}

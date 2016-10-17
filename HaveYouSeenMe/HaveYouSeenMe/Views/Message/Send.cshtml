@@ -1,0 +1,167 @@
+﻿@model HaveYouSeenMe.Models.MessageModel
+
+@{
+    ViewBag.Title = "Send Message";
+}
+
+<div id="messageForm">
+
+    <h2>Send Message</h2>
+
+    @using (Ajax.BeginForm(new AjaxOptions
+                            {
+                                Confirm = "Are you sure you want to send this message?",
+                                HttpMethod = "Post",
+                                InsertionMode = InsertionMode.Replace,
+                                LoadingElementId = "loading",
+                                UpdateTargetId = "messageForm",
+                                OnBegin = "BeginRequest",
+                                OnComplete = "EndRequest",
+                                OnFailure = "RequestFailure",
+                                OnSuccess = "RequestSuccess"
+                            }))
+    {
+        @Html.AntiForgeryToken()
+        @Html.ValidationSummary(true)
+
+        <fieldset>
+            <legend>MessageModel</legend>
+
+            <div class="editor-label">
+                @Html.LabelFor(model => model.From)
+            </div>
+            <div class="editor-field">
+                @Html.EditorFor(model => model.From)
+                @Html.ValidationMessageFor(model => model.From)
+            </div>
+
+            <div class="editor-label">
+                @Html.LabelFor(model => model.Email)
+            </div>
+            <div class="editor-field">
+                @Html.EditorFor(model => model.Email)
+                @Html.ValidationMessageFor(model => model.Email)
+            </div>
+
+            <div class="editor-label">
+                @Html.LabelFor(model => model.Subject)
+            </div>
+            <div class="editor-field">
+                @Html.EditorFor(model => model.Subject)
+                @Html.ValidationMessageFor(model => model.Subject)
+            </div>
+
+            <div class="editor-label">
+                @Html.LabelFor(model => model.Message)
+            </div>
+            <div class="editor-field">
+                @Html.EditorFor(model => model.Message)
+                @Html.ValidationMessageFor(model => model.Message)
+            </div>
+
+            <p>
+                <input type="submit" value="Send Message" />
+            </p>
+        </fieldset>
+    }
+    <div id="petDetails">
+        @using (Ajax.BeginForm(
+                    new AjaxOptions
+                        {
+                            Url = "/Api/PetData/Info",
+                            HttpMethod = "Get",
+                            InsertionMode = InsertionMode.Replace,
+                            LoadingElementId = "loadingDetails",
+                            OnSuccess = "showPetDetails"
+                        }))
+        {
+            <input type="hidden" value="Fido" id="name" name="name" />
+            <button type="submit">Get Pet Details</button>
+        }
+    </div>
+    <div id="loadingDetails" style="display: none">
+        Loading Pet...
+    </div>
+
+</div>
+<div id="petPhoto">
+        @Ajax.ActionLink("Display pet picture", "GetPhoto", "Pet",
+                    new RouteValueDictionary { { "id", ViewBag.PetName } },
+                    new AjaxOptions
+                        {
+                            HttpMethod = "Get",
+                            InsertionMode = InsertionMode.Replace,
+                            LoadingElementId = "loadingPhoto",
+                            UpdateTargetId = "petPhoto"
+                        })
+</div>
+<div id="loading" style="display: none">
+    Sending Message...
+</div>
+
+@section Scripts {
+    @Scripts.Render("~/bundles/jqueryval")
+
+<script>
+
+    function showPetDetails(petData) {
+        var target = $("#petDetails");
+        target.empty();
+
+        if (!petData) {
+            target.append("<em>The pet was not found...<em>");
+        }
+        else {
+            //var lastSeenOn = new Date(parseInt(petData.LastSeenOn.substr(6)));
+            var lastSeenOn = new Date(petData.LastSeenOn);
+            var lastSeen = lastSeenOn.getMonth() + 1 + "/" + lastSeenOn.getDate() + "/" + lastSeenOn.getFullYear();
+            //var lastSeen = petData.LastSeenOn;
+            var age = petData.PetAgeYears + " years and " + petData.PetAgeMonths + " months";
+            var photo = "<img src='/Content/Uploads/" + petData.PetName + ".jpg' style='width:150px;height:120px' />";
+            target.append("<table>");
+            target.append("   <tr><td>Name:</td><td>" + petData.PetName + "</td></tr>");
+            target.append("   <tr><td>Age:</td><td>" + age + "</td></tr>");
+            target.append("   <tr><td>Status:</td><td>" + petData.Status.Description + "</td></tr>");
+            target.append("   <tr><td>Last Seen On:</td><td>" + lastSeen + "</td></tr>");
+            target.append("   <tr><td>Last Seen Where:</td><td>" + petData.LastSeenWhere + "</td></tr>");
+            target.append("   <tr><td>Photo:</td><td>" + photo + "</td></tr>");
+            target.append("</table>");
+        }
+    }
+
+        $(function () {
+            $("#getDetails").on("click", function (e) {
+                e.preventDefault();
+                $.ajax({
+                    url: "/Pet/GetInfo/Fido",
+                    type: "Post",
+                    dataType: "json",
+                    beforeSend: function () {
+                        $("#loadingPhoto").show();
+                    },
+                    complete: function(){
+                        $("#loadingPhoto").hide();
+                    },
+                    success: function (data) {
+                        $("#petPhoto").html(data);
+                    }
+                });
+            });
+        });
+
+        function BeginRequest() {
+            $("#messageForm").hide();
+        }
+
+        function EndRequest(request, status) {
+            $("#messageForm").show();
+        }
+
+        function RequestSuccess(data) {
+            //alert("This is the OnSuccessCallback: " + data);
+        }
+        function RequestFailure(request, error) {
+            alert("This is the OnFailure Callback:" + error);
+        }
+    </script>
+}

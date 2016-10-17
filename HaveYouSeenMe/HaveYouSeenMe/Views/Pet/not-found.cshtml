@@ -1,0 +1,7 @@
+﻿@model HaveYouSeenMe.Models.LoginModel
+@{
+    var u = Model != null ? Model.UserName : "";
+}
+
+<h1>@ViewBag.Title</h1>
+<p>User: @u</p>
